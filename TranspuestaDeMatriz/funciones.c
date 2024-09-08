@@ -22,7 +22,7 @@ FILE *salidaArchivo(char *nombre, char *modo){
     return outfile;
 }
 
-void copiarMatrizAMatriz(int **matrizA, int ***matrizAT, int filas, int columnas){
+void calcularTranspuesta(int **matrizA, int ***matrizAT, int filas, int columnas){
     for (int i = 0; i < filas; i++){
         for (int j = 0; j < columnas; j++){
             (*matrizAT)[i][j] = matrizA[j][i];
