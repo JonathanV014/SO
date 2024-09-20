@@ -20,6 +20,17 @@ int *espacioArreglo(int n){
     }
     return array;
 }
+
+pid_t *espacioArregloPro(int n){
+    pid_t *array = NULL;
+    array =(pid_t *)malloc(n * sizeof(pid_t));
+    if (array == NULL){
+        printf("No se reservó memoria\n");
+        exit(1);
+    }
+    return array;
+}
+
 void copiarArchivoAArreglo(FILE *nombreArchivo, int *arreglo, int n){
     for (int i = 0; i < n; i++){
         fscanf(nombreArchivo, "%d", &arreglo[i]);
@@ -39,18 +50,4 @@ void mostrarArreglo(int n, int *arreglo){
     printf("\n");
 }
 
-void liberarEspacioArreglo(int n, int **arreglo){
-    free(*arreglo); 
-    *arreglo = NULL; 
-}
 
-// void escribirArchivo(FILE *archivo, int *matriz, int n){
-//     fprintf(archivo, "%d %d\n", , columnas); 
-
-//     for (int i = 0; i < filas; i++) {
-//         for (int j = 0; j < columnas; j++) {
-//             fprintf(archivo, "%d ", matriz[i][j]);
-//         }
-//         fprintf(archivo, "\n");
-//     }
-// }
