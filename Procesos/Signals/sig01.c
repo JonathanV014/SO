@@ -60,6 +60,8 @@ int main() {
         exit(EXIT_FAILURE);
     }
 
+    free(pidhijos);
+    pidhijos = NULL;
 
     return EXIT_SUCCESS; // Indica que el programa terminó exitosamente
 }
