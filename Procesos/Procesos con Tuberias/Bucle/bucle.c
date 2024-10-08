@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <sys/types.h>
 #include <sys/wait.h>
-#define TAMA 200
+#define TAMA 100
 
 
 int main(int argc, char const *argv[]){
@@ -13,7 +13,7 @@ int main(int argc, char const *argv[]){
 
 
     int nHijos;
-    printf("Enter the number of child processes: "); scanf("%d", &nHijos);
+    printf("Enter the number of child processes: "); scanf("%d", &nHijos);getchar();
     int nPipes = nHijos + 1;
 
     pid_t *hijosD = NULL;
@@ -53,14 +53,20 @@ int main(int argc, char const *argv[]){
 
 
     int status;
-    char ms[TAMA] = {'\0'}, llega[TAMA] = {'\0'}, resultado[TAMA] = {'\0'};
+    char ms[TAMA], llega[TAMA], resultado[TAMA];
     
     if (padre == getpid()){
         close(pipesD[i-i][1]);
         close(pipesD[i][0]);
         
         printf("Enter the message you wish to send: ");
-        scanf("%s", &ms);
+        
+        fgets(ms, TAMA, stdin);
+        size_t length = strlen(ms);
+        if (ms[length - 1] == '\n') {
+            ms[length - 1] = '\0';
+        }
+
         printf("SEND: %s | SHIPPING PIPE: %d | ROOT PROCESS PID(START): %d | DESTINATION PID: %d\n", ms, i, getpid(), hijosD[i-1]);
         printf("--------------------------------------------------------------------------------------------------\n");
         write(pipesD[i][1], &ms, sizeof(char[TAMA]));
@@ -87,6 +93,15 @@ int main(int argc, char const *argv[]){
         write(pipesD[i][1], &resultado, sizeof(char[TAMA]));
         close(pipesD[i][1]);
     }
+
+    free(hijosD);
+    hijosD = NULL;
+    for (int i = 0; i < nPipes; i++){
+        free(pipesD[i]);
+        pipesD[i] = NULL;
+    }
+    free(pipesD);
+    pipesD = NULL;
     
     return 0;
 }
