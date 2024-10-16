@@ -7,6 +7,12 @@
 #define TAMA 100
 
 
+void showtree() {
+    char cmd[20] = {""};
+    sprintf(cmd, "pstree -cAlp %d", getpid()); // Formatea el comando con el PID del proceso actual.
+    system(cmd); // Ejecuta el comando en el shell.
+}
+
 int main(int argc, char const *argv[]){
     int i = 0;
     pid_t padre = getpid();
@@ -56,6 +62,8 @@ int main(int argc, char const *argv[]){
     char ms[TAMA], llega[TAMA], resultado[TAMA];
     
     if (padre == getpid()){
+        sleep(1);
+        showtree();
         close(pipesD[i-i][1]);
         close(pipesD[i][0]);
         
