@@ -6,11 +6,11 @@
 #include <sys/shm.h>
 #include <sys/stat.h>
 
-double calcularNine(int **matrizIMG, int filas, int columnas, int l, int j){
-    int inicioFila = l - 1;
-    int inicioColumna = j - 1;
-    int finFila = l + 1;
-    int finColumna = j + 1;
+double calcularNine(int **matrizIMG, int filas, int columnas, int l, int j, int factor){
+    int inicioFila = l - factor;
+    int inicioColumna = j - factor;
+    int finFila = l + factor;
+    int finColumna = j + factor;
 
     double resultado = 0;
     for (int i = inicioFila; i <= finFila; i++){
@@ -22,7 +22,7 @@ double calcularNine(int **matrizIMG, int filas, int columnas, int l, int j){
             }
         }
     }
-    return (resultado/9);
+    return (resultado/((factor+factor+1)*(factor+factor+1)));
 }
 
 int main(int argc, char const *argv[]){
@@ -131,13 +131,20 @@ int main(int argc, char const *argv[]){
             waitpid(pidHijos[i], &status, 0);
         }
         printf("\nMatriz blur: \n");
-        
+        FILE *salida = NULL;
+        salida = fopen("salida.txt", "w");
+        fprintf(salida, "%d\n", filas);
+        fprintf(salida, "%d\n", columnas);
         for (int i = 0; i < filas; i++){
             for (int j = 0; j < columnas; j++){
                 printf("[%.1lf] ", matrizBlur[i][j]);
+                fprintf(salida, "%.1lf ", matrizBlur[i][j]);
             }
             printf("\n");
+            fprintf(salida, "\n");
         }
+        fclose(salida);
+        salida = NULL;
 
         //ELIMINAR MEMORIA MATRIZ IMAGEN ORIGINAL
         for (int i = 0; i < filas; i++){
@@ -174,7 +181,7 @@ int main(int argc, char const *argv[]){
 
         for (int l = inicio; l < fin; l++){
             for (int j = 0; j < columnas; j++){
-                double calculo = calcularNine(matrizIMG, filas, columnas, l, j);
+                double calculo = calcularNine(matrizIMG, filas, columnas, l, j, atoi(argv[2]));
                 matrizBlur[l][j] = calculo;
             }
         }
