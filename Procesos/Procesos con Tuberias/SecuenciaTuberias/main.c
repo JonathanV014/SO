@@ -88,24 +88,22 @@ int main(int argc, char const *argv[]){
             }
         }
         
-        char *text = imprePos(quien);
+
+        strcat(mensaje,  imprePos(quien));
+
         close(tuberias[0][0]);
         close(tuberias[13][1]);
-        int codeE = 1001;
-        int codeR = -1;
-        write(tuberias[0][1], &codeE, sizeof(int));
+
+        write(tuberias[0][1], &mensaje, sizeof(char[30]));
         close(tuberias[0][1]);
-        int status;
-        waitpid(pidHijosNivel1[0], &status, 0);
-        while (codeR != codeE){
-            read(tuberias[13][0], &codeR, sizeof(int));
-        }
-        imprePos(quien);
-        printf("\n");
+
+        
+        
+        read(tuberias[13][0], &mensaje, sizeof(char[30]));
+        strcat(mensaje, "a");
+        printf("%s\n", mensaje);
         close(tuberias[13][0]);
     }else{
-        int codeR = -1;
-        int codigo = 1001;
         int lectura1 = -1, escritura1 = -1, lectura2 = -1, escritura2 = -1;
 
         if (idx == 0){
@@ -185,27 +183,25 @@ int main(int argc, char const *argv[]){
             close(tuberias[escritura2][0]);
         }
         
-        int leido;
-        while (leido != codigo){ //LECTURA 1
-            read(tuberias[lectura1][0], &leido, sizeof(int));
-        }
-        close(tuberias[lectura1][0]);
-        imprePos(quien);
-        
-        leido = -1;
 
-        write(tuberias[escritura1][1], &codigo, sizeof(int)); //ESCRITURA 1
+        read(tuberias[lectura1][0], &mensaje, sizeof(char[30]));
+        close(tuberias[lectura1][0]);
+
+        strcat(mensaje, imprePos(quien));
+        
+
+        write(tuberias[escritura1][1], &mensaje, sizeof(char[30])); //ESCRITURA 1
         close(tuberias[escritura1][1]);
+
         if (lectura2 != -1 && escritura2 != -1){
 
-            while (leido != codigo){ //LECTURA 2
-                read(tuberias[lectura2][0], &leido, sizeof(int));
-            }
+            //LECTURA 2
+            read(tuberias[lectura2][0], &mensaje, sizeof(char[30]));
             close(tuberias[lectura2][0]);
-            imprePos(quien);
+            strcat(mensaje, imprePos(quien));
 
 
-            write(tuberias[escritura2][1], &codigo, sizeof(int)); //ESCRITURA 2
+            write(tuberias[escritura2][1], &mensaje, sizeof(char[30])); //ESCRITURA 2
             close(tuberias[escritura2][1]);
         }
         
