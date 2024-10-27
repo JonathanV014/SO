@@ -91,7 +91,7 @@ int main(int argc, char const *argv[]){
             int idMemoriaIncidencias = idsMemoriasHijos[i];
             data *vecIncidencias = (data *) shmat(idMemoriaIncidencias, 0, 0);
             for (int j = 0; j < tamIncidencias; j++){
-                //printf("Incidencia Encontrada por hijo PID %d en la posicion %d\n", vecIncidencias[j].hijo, vecIncidencias[j].i);
+                printf("Incidencia Encontrada por hijo PID %d en la posicion %d\n", vecIncidencias[j].hijo, vecIncidencias[j].i);
                 incidenciasTotales++;
             }
             shmdt(vecIncidencias);
